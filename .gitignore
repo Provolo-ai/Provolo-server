@@ -3,3 +3,8 @@ dist
 .env
 .DS_Store
 .vscode
+
+# Firebase Config
+firebaseConfig.json
+firebase_config_encoded.txt
+firebase_config_decoded.json

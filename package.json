@@ -6,7 +6,9 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon ts-node ./src/server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "encode-firebase-config": "ts-node ./src/scripts/encodeFirebaseConfig.ts",
+    "decode-firebase-config": "ts-node ./src/scripts/decodeFirebaseConfig.ts"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +18,7 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
+    "firebase-admin": "^13.5.0",
     "morgan": "^1.10.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"

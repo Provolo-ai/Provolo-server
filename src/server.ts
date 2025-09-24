@@ -5,8 +5,9 @@ import dotenv from "dotenv";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
-import { SwaggerOptions } from "./config/swagger.config.ts";
 import v1Routes from "./routes/index.ts";
+import { SwaggerOptions } from "./config/swagger.config.ts";
+import { corsMiddleware } from "./middlewares/cors.middleware.ts";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ const swaggerSpec = swaggerJsdoc(SwaggerOptions);
 const app = express();
 app.use(express.json());
 app.use(morgan("combined"));
+app.use(corsMiddleware());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/v1", v1Routes);

@@ -1,9 +1,23 @@
 import { readFileSync, existsSync } from "fs";
 import { decodeFirebaseConfig } from "./firebaseConfigCrypto.ts";
 import { initializeApp, applicationDefault, cert, App, ServiceAccount } from "firebase-admin/app";
+import { getApps, getApp } from "firebase-admin/app";
 
 // Get Firebase App instance with config from env, encoded file, or fallback to JSON
+let cachedApp: App | null = null;
+
+export function closeFirebaseApp(): void {
+  if (cachedApp) {
+    // @ts-ignore: Firebase admin SDK does not type delete() on App, but it's available
+    cachedApp.delete && cachedApp.delete();
+    cachedApp = null;
+  }
+}
+
 export function getFirebaseApp(): App {
+  if (cachedApp) {
+    return cachedApp;
+  }
   const encodedConfig = process.env.FIREBASE_ENCODED_CONFIG || "";
   const secretKey = process.env.FIREBASE_SECRET_KEY || "";
 
@@ -27,11 +41,16 @@ export function getFirebaseApp(): App {
       if (existsSync(plainFile)) {
         credential = cert(JSON.parse(readFileSync(plainFile, "utf-8")) as ServiceAccount);
       } else {
-        // Fallback to application default
+        // Fallback to application default DEV environment
         credential = applicationDefault();
       }
     }
   }
 
-  return initializeApp({ credential });
+  if (getApps().length > 0) {
+    cachedApp = getApp();
+    return cachedApp;
+  }
+  cachedApp = initializeApp({ credential });
+  return cachedApp;
 }

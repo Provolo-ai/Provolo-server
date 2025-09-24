@@ -1,3 +1,4 @@
+import { SwaggerSchemas } from "./swagger.schemas.ts";
 export const SwaggerOptions = {
   definition: {
     openapi: "3.1.0",
@@ -12,7 +13,7 @@ export const SwaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:8000",
+        url: "http://localhost:8001",
       },
       {
         url: "https://provolo-backend.onrender.com",
@@ -29,6 +30,7 @@ export const SwaggerOptions = {
           description: 'Type "Bearer" followed by a space and JWT token.',
         },
       },
+      schemas: SwaggerSchemas,
     },
     security: [
       {

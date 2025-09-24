@@ -7,6 +7,7 @@
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
+    "allowImportingTsExtensions": true,
     "target": "esnext",
     "lib": ["esnext"],
     "types": ["node"],
@@ -35,10 +36,7 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-    "allowImportingTsExtensions": true,
+    "esModuleInterop": true,
     "noEmit": true
-  },
-  "ts-node": {
-    "esm": true
   }
 }

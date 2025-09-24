@@ -6,6 +6,7 @@ import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
 import { SwaggerOptions } from "./config/swagger.config.ts";
+import v1Routes from "./routes/index.ts";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(morgan("combined"));
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api/v1", v1Routes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Provolo Server!");

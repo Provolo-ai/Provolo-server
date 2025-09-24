@@ -12,14 +12,14 @@ export const SwaggerOptions = {
     },
     servers: [
       {
-        url: "https://provolo-backend.onrender.com",
+        url: "http://localhost:8000",
       },
       {
-        url: "http://localhost:8000",
+        url: "https://provolo-backend.onrender.com",
       },
     ],
     basePath: "/",
-    schemes: ["https", "http"],
+    schemes: ["http", "https"],
     components: {
       securitySchemes: {
         BearerAuth: {
@@ -36,5 +36,5 @@ export const SwaggerOptions = {
       },
     ],
   },
-  apis: ["./routes/*.js"],
+  apis: ["src/routes/*.ts"],
 };

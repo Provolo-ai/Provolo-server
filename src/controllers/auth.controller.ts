@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
-import { getFirebaseApp } from "../utils/getFirebaseApp.ts";
+import { closeFirebaseApp, getFirebaseApp } from "../utils/getFirebaseApp.ts";
 import { newSuccessResponse, newErrorResponse } from "../utils/apiResponse.ts";
 import { getCookie } from "../utils/getCookie.ts";
 
@@ -340,5 +340,22 @@ export async function verifySession(req: Request, res: Response) {
           "Unable to verify your session. Please contact support if this continues."
         )
       );
+  }
+}
+
+export async function logout(req: Request, res: Response) {
+  try {
+    res.cookie("session", "", {
+      maxAge: -1,
+      path: "/",
+      sameSite: "none",
+      secure: true,
+      httpOnly: true,
+    });
+    return res
+      .status(200)
+      .json(newSuccessResponse("Logout Successful", "User logged out successfully", null));
+  } finally {
+    closeFirebaseApp();
   }
 }

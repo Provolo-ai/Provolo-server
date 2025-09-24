@@ -1,7 +1,12 @@
 import { Router } from "express";
 import type { Router as ExpressRouter } from "express";
 import { strictRateLimiter } from "../middlewares/rateLimiter.middleware.ts";
-import { login, signupOrEnsureUser, verifySession } from "../controllers/auth.controller.ts";
+import {
+  login,
+  logout,
+  signupOrEnsureUser,
+  verifySession,
+} from "../controllers/auth.controller.ts";
 
 const authRouter: ExpressRouter = Router();
 
@@ -101,9 +106,22 @@ authRouter.post("/login", strictRateLimiter(), login);
  */
 authRouter.get("/verify", verifySession);
 
-// Dummy signout route
-authRouter.post("/signout", (req, res) => {
-  res.json({ message: "Signout successful (dummy)" });
-});
+/**
+ * @openapi
+ * /signout:
+ *   post:
+ *     summary: User logout
+ *     description: Logs out the user by clearing the session cookie
+ *     tags:
+ *       - Auth
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiResponse'
+ */
+authRouter.post("/signout", logout);
 
 export default authRouter;

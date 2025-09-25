@@ -1,6 +1,7 @@
-import { Feature, Tier } from "../types/tiers.ts";
+import "dotenv/config";
 import { getFirebaseApp, closeFirebaseApp } from "../utils/getFirebaseApp.ts";
 import { getFirestore } from "firebase-admin/firestore";
+import type { Feature, Tier } from "../types/tiers.ts";
 
 const tiers: Tier[] = [
   {
@@ -108,7 +109,7 @@ function validateFeatures(features: Feature[]): string | null {
   return null;
 }
 
-async function seedTiers() {
+export async function seedTiers() {
   const app = getFirebaseApp();
   const db = getFirestore(app);
 
@@ -129,9 +130,5 @@ async function seedTiers() {
     }
   }
   closeFirebaseApp();
-  console.log("Seeding complete ✅");
-}
-
-if (require.main === module) {
-  seedTiers();
+  console.log("Seeding completed ✅");
 }

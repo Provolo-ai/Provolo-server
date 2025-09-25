@@ -1,7 +1,7 @@
 import { readFileSync, existsSync } from "fs";
 import { decodeFirebaseConfig } from "./firebaseConfigCrypto.ts";
-import { initializeApp, applicationDefault, cert, App, ServiceAccount } from "firebase-admin/app";
-import { getApps, getApp } from "firebase-admin/app";
+import { initializeApp, applicationDefault, cert, getApps, getApp } from "firebase-admin/app";
+import type { App, ServiceAccount } from "firebase-admin/app";
 
 // Get Firebase App instance with config from env, encoded file, or fallback to JSON
 let cachedApp: App | null = null;
@@ -48,9 +48,11 @@ export function getFirebaseApp(): App {
   }
 
   if (getApps().length > 0) {
-    cachedApp = getApp();
-    return cachedApp;
+    const existing = getApp();
+    cachedApp = existing;
+    return existing;
   }
-  cachedApp = initializeApp({ credential });
-  return cachedApp;
+  const created = initializeApp({ credential });
+  cachedApp = created;
+  return created;
 }

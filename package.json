@@ -8,7 +8,8 @@
     "dev": "nodemon ts-node ./src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "encode-firebase-config": "ts-node ./src/scripts/encodeFirebaseConfig.ts",
-    "decode-firebase-config": "ts-node ./src/scripts/decodeFirebaseConfig.ts"
+    "decode-firebase-config": "ts-node ./src/scripts/decodeFirebaseConfig.ts",
+    "seed-tiers": "ts-node ./src/seed/seedTiers.ts"
   },
   "keywords": [],
   "author": "",

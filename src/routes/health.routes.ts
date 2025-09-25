@@ -12,7 +12,7 @@ const healthRouter: ExpressRouter = Router();
  *     summary: Get health check
  *     description: Returns a simple message to indicate the service is up
  *     tags:
- *       - health
+ *       - Health
  *     produces:
  *       - application/json
  *     responses:

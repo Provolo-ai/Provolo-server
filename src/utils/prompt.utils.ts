@@ -10,9 +10,10 @@ export async function checkOptimizerQuotaForUser(userId: string): Promise<Prompt
   const db = getFirestore(app);
   try {
     // 1. Get user doc
-    const userSnap = await db.collection("users").doc(userId).get();
-    if (!userSnap.exists) throw new Error("User not found");
-    const user = userSnap.data() as { tierId?: string };
+    const userSnap = await db.collection("users").where("userId", "==", userId).limit(1).get();
+
+    if (userSnap.empty || !userSnap.docs[0]) throw new Error("User not found. Please sign in again or contact support if this issue persists.");
+    const user = userSnap.docs[0].data() as { tierId?: string };
     const tierId = user.tierId || process.env.DEFAULT_TIER_ID;
     if (!tierId) throw new Error("Tier ID not found. Please contact support, an error occurred.");
 

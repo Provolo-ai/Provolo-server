@@ -1,4 +1,5 @@
-import cors, { CorsOptions } from "cors";
+import cors from "cors";
+import type{ CorsOptions } from "cors";
 
 const devOrigins = ["http://localhost:5173", "http://localhost:3000"];
 

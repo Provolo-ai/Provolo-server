@@ -1,7 +1,7 @@
 import { Router } from "express";
 import type { Router as ExpressRouter } from "express";
-import { optimizeProfile } from "../controllers/optimize.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.ts";
+import { optimizeProfile } from "../controllers/optimize.controller.ts";
 
 const aiRouter: ExpressRouter = Router();
 

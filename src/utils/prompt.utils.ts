@@ -1,8 +1,8 @@
 import { getFirestore } from "firebase-admin/firestore";
-import { getFirebaseApp, closeFirebaseApp } from "./getFirebaseApp.js";
-import { Tier } from "../types/tiers.ts";
-import { PromptLimitResult, UserPromptLimit } from "../types/prompt.types.ts";
-import { QuotaHistory } from "../types/quotas.ts";
+import type { Tier } from "../types/tiers.ts";
+import type { PromptLimitResult, UserPromptLimit } from "../types/prompt.types.ts";
+import type { QuotaHistory } from "../types/quotas.ts";
+import { closeFirebaseApp, getFirebaseApp } from "./getFirebaseApp.ts";
 
 // Check optimizer quota for the user's current tier and usage
 export async function checkOptimizerQuotaForUser(userId: string): Promise<PromptLimitResult> {

@@ -1,4 +1,4 @@
-import { gemini } from "../config/gemini.config.js";
+import { gemini } from "../config/gemini.config.ts";
 
 export async function callGemini(prompt: string, systemInstruction: string): Promise<string> {
   const response = await gemini.models.generateContent({

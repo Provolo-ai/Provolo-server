@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import {
   checkOptimizerQuotaForUser,
   updateUserPromptLimit,
   optimizerPrompt,
   optimizerSystemInstruction,
-} from "../utils/prompt.utils.js";
-import { callGemini } from "../utils/geminiClient.js";
+} from "../utils/prompt.utils.ts";
+import { callGemini } from "../utils/geminiClient.ts";
 import { newErrorResponse, newSuccessResponse } from "../utils/apiResponse.ts";
 
 interface PromptReq {

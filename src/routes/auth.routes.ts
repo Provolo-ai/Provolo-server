@@ -108,7 +108,7 @@ authRouter.get("/verify", verifySession);
 
 /**
  * @openapi
- * /signout:
+ * /api/v1/auth/logout:
  *   post:
  *     summary: User logout
  *     description: Logs out the user by clearing the session cookie
@@ -122,6 +122,6 @@ authRouter.get("/verify", verifySession);
  *             schema:
  *               $ref: '#/components/schemas/ApiResponse'
  */
-authRouter.post("/signout", logout);
+authRouter.post("/logout", logout);
 
 export default authRouter;

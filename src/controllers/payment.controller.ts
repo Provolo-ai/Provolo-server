@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
 import type { DocumentSnapshot, DocumentReference } from "firebase-admin/firestore";
-import { getFirebaseApp } from "../utils/getFirebaseApp.js";
+import { getFirebaseApp } from "../utils/getFirebaseApp.ts";
 import { newErrorResponse, newSuccessResponse } from "../utils/apiResponse.js";
 import { createQuotaHistoryFromTier } from "../utils/quota.utils.js";
 import type { Tier } from "../types/tiers.js";

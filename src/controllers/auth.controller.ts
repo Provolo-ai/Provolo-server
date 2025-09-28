@@ -4,6 +4,8 @@ import { getFirestore } from "firebase-admin/firestore";
 import { closeFirebaseApp, getFirebaseApp } from "../utils/getFirebaseApp.ts";
 import { newSuccessResponse, newErrorResponse } from "../utils/apiResponse.ts";
 import { getCookie } from "../utils/getCookie.ts";
+import { createQuotaHistoryFromTier } from "../utils/quota.utils.ts";
+import { createPolarCustomer } from "../utils/polarClient.ts";
 
 export async function login(req: Request, res: Response) {
   try {
@@ -188,35 +190,73 @@ export async function signupOrEnsureUser(req: Request, res: Response) {
       const doc = docs.docs[0];
       if (doc) {
         const data = doc.data();
-        userData = {
+        const userDataObj: any = {
           id: doc.id,
           userId: userID,
           email: userRecord.email,
-          displayName: userRecord.displayName,
           tierId: data.tierId || starterTierId,
           subscribed: data.subscribed ?? true,
           createdAt: data.createdAt ? new Date(data.createdAt.seconds * 1000) : now,
           updatedAt: data.updatedAt ? new Date(data.updatedAt.seconds * 1000) : now,
         };
+
+        // Only add displayName if it exists
+        if (userRecord.displayName) {
+          userDataObj.displayName = userRecord.displayName;
+        }
+
+        userData = userDataObj;
       }
     } else {
       // Create new user
       isNewUser = true;
-      const newUserData = {
+      const newUserData: any = {
         userId: userID,
         email: userRecord.email,
-        displayName: userRecord.displayName,
         tierId: starterTierId,
         subscribed: true,
         createdAt: now,
         updatedAt: now,
       };
+
+      // Only add displayName if it exists
+      if (userRecord.displayName) {
+        newUserData.displayName = userRecord.displayName;
+      }
       const docRef = await usersRef.add(newUserData);
       userData = {
         id: docRef.id,
         ...newUserData,
       };
-      // Optionally: create quota history here
+
+      // Create Polar customer for new user
+      try {
+        const polarCustomerResult = await createPolarCustomer({
+          userId: userID,
+          email: userRecord.email!,
+          name: userRecord.displayName || userRecord.email!,
+        });
+
+        // Update user document with polarId
+        await docRef.update({
+          polarId: polarCustomerResult.id,
+          updatedAt: now,
+        });
+
+        // Update userData for response (extend the type)
+        (userData as any).polarId = polarCustomerResult.id;
+
+        console.log(
+          `Created Polar customer for new user ${userID}: ${polarCustomerResult.id} (${
+            polarCustomerResult.created ? "new" : "existing"
+          })`
+        );
+      } catch (error) {
+        console.error(`Failed to create Polar customer for new user ${userID}:`, error);
+      }
+
+      // Create quota history for new users
+      await createQuotaHistoryFromTier(userID, starterTierId as any, false);
     }
 
     // Create session cookie
@@ -224,6 +264,7 @@ export async function signupOrEnsureUser(req: Request, res: Response) {
     try {
       cookie = await auth.createSessionCookie(idToken, { expiresIn: 5 * 24 * 60 * 60 * 1000 });
     } catch (err) {
+      console.error("Signup Error:", err);
       return res
         .status(500)
         .json(
@@ -250,6 +291,7 @@ export async function signupOrEnsureUser(req: Request, res: Response) {
     const action = isNewUser ? "Signup Successful" : "Login Successful";
     return res.status(200).json(newSuccessResponse(action, message, userData));
   } catch (err) {
+    console.error("Signup Error:", err);
     return res
       .status(500)
       .json(

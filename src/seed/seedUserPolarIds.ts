@@ -87,18 +87,18 @@ export async function seedUserPolarIds() {
         updatedAt: FieldValue.serverTimestamp(),
       });
 
-      console.log(`✅ User ${userId} updated with polarId: ${polarCustomer.id}`);
+      console.log(`User ${userId} updated with polarId: ${polarCustomer.id}`);
       successCount++;
 
       // Add small delay to avoid rate limiting
       await new Promise((resolve) => setTimeout(resolve, 100));
     } catch (error) {
-      console.error(`❌ Failed to create Polar customer for user ${doc.id}:`, error);
+      console.error(`Failed to create Polar customer for user ${doc.id}:`, error);
       errorCount++;
     }
   }
 
   console.log(`\nSeeding completed:`);
-  console.log(`✅ Successfully processed: ${successCount} users`);
-  console.log(`❌ Failed: ${errorCount} users`);
+  console.log(`Successfully processed: ${successCount} users`);
+  console.log(`Failed: ${errorCount} users`);
 }

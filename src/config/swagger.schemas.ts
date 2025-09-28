@@ -17,6 +17,45 @@ export const SwaggerSchemas = {
     },
     required: ["id", "userId", "email", "tierId", "subscribed", "createdAt", "updatedAt"],
   },
+  Tier: {
+    type: "object",
+    properties: {
+      name: { type: "string" },
+      slug: { type: "string" },
+      polarRefId: { type: "string" },
+      price: { type: "number" },
+      description: { type: "string" },
+      recurringInterval: { type: "string", enum: ["monthly"] },
+      features: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            name: { type: "string" },
+            description: { type: "string" },
+            slug: { type: "string" },
+            limited: { type: "boolean" },
+            maxQuota: { type: "number" },
+            recurringInterval: { type: "string", enum: ["daily", "weekly", "monthly", ""] },
+          },
+          required: ["name", "description", "slug", "limited", "maxQuota", "recurringInterval"],
+        },
+      },
+      createdAt: { type: "string", format: "date-time" },
+      updatedAt: { type: "string", format: "date-time" },
+    },
+    required: [
+      "name",
+      "slug",
+      "polarRefId",
+      "price",
+      "description",
+      "recurringInterval",
+      "features",
+      "createdAt",
+      "updatedAt",
+    ],
+  },
   ApiResponse: {
     type: "object",
     properties: {
@@ -26,6 +65,8 @@ export const SwaggerSchemas = {
       data: {
         oneOf: [
           { $ref: "#/components/schemas/User" },
+          { $ref: "#/components/schemas/Tier" },
+          { type: "array", items: { $ref: "#/components/schemas/Tier" } },
           { type: "null" },
           { type: "object" },
           { type: "array" },

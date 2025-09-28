@@ -1,7 +1,6 @@
 import { getFirestore, Timestamp, DocumentData } from "firebase-admin/firestore";
-import { getAuth } from "firebase-admin/auth";
-import { getFirebaseApp, closeFirebaseApp } from "./getFirebaseApp.js";
-import type { QuotaFeature, QuotaHistory } from "../types/quotas.js";
+import { getFirebaseApp, closeFirebaseApp } from "./getFirebaseApp.ts";
+import type { QuotaFeature, QuotaHistory } from "../types/quotas.ts";
 import type { Tier, FeatureSlug } from "../types/tiers.js";
 
 // Reset usage count if a new interval has started
@@ -82,14 +81,24 @@ export async function checkUserQuota(userId: string, slug: FeatureSlug) {
 }
 
 // Seed quota history for a user from their tier
-export async function createQuotaHistoryFromTier(userId: string, slug: FeatureSlug) {
+export async function createQuotaHistoryFromTier(
+  userId: string,
+  slug: FeatureSlug,
+  closeApp: boolean = true
+) {
   const app = getFirebaseApp();
   const db = getFirestore(app);
   try {
-    // Get user doc
-    const userSnap = await db.collection("users").doc(userId).get();
-    if (!userSnap.exists) throw new Error(`User not found: ${userId}`);
-    const user = userSnap.data() as DocumentData;
+    // Get user doc by querying userId field (not document ID)
+    const userQuery = db.collection("users").where("userId", "==", userId).limit(1);
+    const userSnap = await userQuery.get();
+
+    if (userSnap.empty) throw new Error(`User not found: ${userId}`);
+
+    const userDoc = userSnap.docs[0];
+    if (!userDoc) throw new Error(`User document not found: ${userId}`);
+
+    const user = userDoc.data();
     const tierId = user.tierId || process.env.DEFAULT_TIER_ID || "starter";
     // Get tier doc
     const tierSnap = await db.collection("tiers").doc(tierId).get();
@@ -118,7 +127,9 @@ export async function createQuotaHistoryFromTier(userId: string, slug: FeatureSl
       limit: target?.maxQuota ?? 0,
     };
   } finally {
-    closeFirebaseApp();
+    if (closeApp) {
+      closeFirebaseApp();
+    }
   }
 }
 

@@ -366,6 +366,7 @@ export async function verifySession(req: Request, res: Response) {
       displayName: userRecord.displayName,
       photoURL: userRecord.photoURL,
       tierId: data.tierId,
+      polarId: data.polarId,
       subscribed: data.subscribed ?? true,
       createdAt: data.createdAt ? new Date(data.createdAt.seconds * 1000) : undefined,
       updatedAt: data.updatedAt ? new Date(data.updatedAt.seconds * 1000) : undefined,

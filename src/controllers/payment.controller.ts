@@ -2,10 +2,10 @@ import type { Request, Response } from "express";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
 import type { DocumentSnapshot, DocumentReference } from "firebase-admin/firestore";
 import { getFirebaseApp } from "../utils/getFirebaseApp.ts";
-import { newErrorResponse, newSuccessResponse } from "../utils/apiResponse.js";
-import { createQuotaHistoryFromTier } from "../utils/quota.utils.js";
-import type { Tier } from "../types/tiers.js";
-import type { QuotaHistory } from "../types/quotas.js";
+import { newErrorResponse, newSuccessResponse } from "../utils/apiResponse.ts";
+import { createQuotaHistoryFromTier } from "../utils/quota.utils.ts";
+import type { Tier } from "../types/tiers.ts";
+import type { QuotaHistory } from "../types/quotas.ts";
 
 // Default tier ID
 const DEFAULT_TIER_ID = process.env.DEFAULT_TIER_ID || "starter";

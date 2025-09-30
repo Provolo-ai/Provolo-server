@@ -1,7 +1,7 @@
-import { getFirestore, Timestamp, DocumentData } from "firebase-admin/firestore";
+import { getFirestore } from "firebase-admin/firestore";
 import { getFirebaseApp, closeFirebaseApp } from "./getFirebaseApp.ts";
 import type { QuotaFeature, QuotaHistory } from "../types/quotas.ts";
-import type { Tier, FeatureSlug } from "../types/tiers.js";
+import type { Tier, FeatureSlug } from "../types/tiers.ts";
 
 // Reset usage count if a new interval has started
 export function resetIfNewInterval(feature: QuotaFeature, now: Date): number {
